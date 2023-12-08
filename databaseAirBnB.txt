@@ -1,0 +1,115 @@
+CREATE DATABASE BEfinal;
+
+USE BEfinal;
+
+# Table NguoiDung
+CREATE TABLE nguoi_dung(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	full_name VARCHAR(100),
+	email VARCHAR(100),
+	pass_word VARCHAR(100),
+	phone VARCHAR(20),
+	birth_day VARCHAR(20),
+	gender VARCHAR(20),
+	role VARCHAR(50),
+	avatar VARCHAR(1000)
+);
+
+# Table ViTri
+CREATE TABLE vi_tri(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	ten_vi_tri VARCHAR(100),
+	tinh_thanh VARCHAR(100),
+	quoc_gia VARCHAR(100),
+	hinh_anh VARCHAR(1000)
+);
+
+# Table Phong
+CREATE TABLE phong(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	ten_phong VARCHAR(200),
+	khach INT,
+	phong_ngu INT,
+	giuong INT,
+	phong_tam INT,
+	mo_ta VARCHAR(1000),
+	gia_tien INT,
+	may_giat BOOLEAN,
+	ban_la BOOLEAN,
+	tivi BOOLEAN,
+	dieu_hoa BOOLEAN,
+	wifi BOOLEAN,
+	bep BOOLEAN,
+	do_xe BOOLEAN,
+	ho_boi BOOLEAN,
+	ban_ui BOOLEAN,
+	ma_vi_tri INT,
+	FOREIGN KEY (ma_vi_tri) REFERENCES vi_tri(id),
+	hinh_anh VARCHAR(1000) 
+);
+
+# Table BinhLuan
+CREATE TABLE binh_luan(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	ma_phong INT,
+	FOREIGN KEY (ma_phong) REFERENCES phong(id),
+	ma_nguoi_binh_luan INT,
+	FOREIGN KEY (ma_nguoi_binh_luan) REFERENCES nguoi_dung(id),
+	ngay_binh_luan DATE,
+	noi_dung VARCHAR(1000),
+	sao_binh_luan INT
+);
+
+# Table DatPhong
+CREATE TABLE dat_phong(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	ma_phong INT,
+	FOREIGN KEY (ma_phong) REFERENCES phong(id),
+	ngay_den DATE,
+	ngay_di DATE,
+	so_luong_khach INT,
+	ma_nguoi_dat INT,
+	FOREIGN KEY (ma_nguoi_dat) REFERENCES nguoi_dung(id)
+);
+
+# INSERT DATA
+
+# NguoiDung
+INSERT INTO nguoi_dung (full_name, email, pass_word, phone, birth_day, gender, role, avatar) VALUES
+('John Doe', 'john.doe@example.com', 'password123', '1234567890', '1990-05-15', 'Male', 'User', 'avatar1.png'),
+('Jane Smith', 'jane.smith@example.com', 'pass456', '9876543210', '1988-09-22', 'Female', 'User', 'avatar2.png'),
+('Bob Johnson', 'bob.johnson@example.com', 'abc@123', '5551112233', '1995-02-10', 'Male', 'User', 'avatar3.png'),
+('Alice Brown', 'alice.brown@example.com', 'securePass', '7778889999', '1992-11-08', 'Female', 'Admin', 'avatar4.png'),
+('Charlie Davis', 'charlie.davis@example.com', 'strongPassword', '4445556666', '1985-07-03', 'Male', 'User', 'avatar5.png');
+
+# ViTri
+INSERT INTO vi_tri (ten_vi_tri, tinh_thanh, quoc_gia, hinh_anh) VALUES
+('Downtown Area', 'Ho Chi Minh City', 'Vietnam', 'path/to/downtown.jpg'),
+('Beachfront Resort', 'Phuket', 'Thailand', 'path/to/beachfront-resort.jpg'),
+('Mountain Retreat', 'Dalat', 'Vietnam', 'path/to/mountain-retreat.jpg'),
+('City Center', 'Tokyo', 'Japan', 'path/to/city-center.jpg'),
+('Seaside Villa', 'Nice', 'France', 'path/to/seaside-villa.jpg');
+
+# Phong
+INSERT INTO phong (ten_phong, khach, phong_ngu, giuong, phong_tam, mo_ta, gia_tien, may_giat, ban_la, tivi, dieu_hoa, wifi, bep, do_xe, ho_boi, ban_ui, ma_vi_tri, hinh_anh) VALUES
+('Deluxe Suite', 2, 1, 1, 1, 'Spacious deluxe suite with a stunning view.', 1500, true, true, true, true, true, true, true, false, true, 1, 'path/to/deluxe-suite.jpg'),
+('Standard Room', 1, 1, 1, 1, 'Comfortable standard room for a relaxing stay.', 800, false, true, true, true, true, true, false, false, false, 2, 'path/to/standard-room.jpg'),
+('Family Suite', 4, 2, 2, 2, 'Perfect for a family getaway with ample space.', 2000, true, true, true, true, true, true, true, true, true, 3, 'path/to/family-suite.jpg'),
+('Executive Suite', 2, 1, 1, 1, 'Luxurious executive suite with top-notch amenities.', 2500, true, true, true, true, true, true, true, true, true, 4, 'path/to/executive-suite.jpg'),
+('Cozy Cabin', 2, 1, 1, 1, 'A charming cabin for a cozy and intimate stay.', 1200, false, true, true, true, true, true, false, false, false, 5, 'path/to/cozy-cabin.jpg');
+
+# BinhLuan
+INSERT INTO binh_luan (ma_phong, ma_nguoi_binh_luan, ngay_binh_luan, noi_dung, sao_binh_luan) VALUES
+(1, 3, '2023-01-20', 'The deluxe suite was amazing, and the view was breathtaking!', 5),
+(2, 1, '2023-02-15', 'Stayed in the standard room, very cozy and comfortable.', 4),
+(3, 4, '2023-03-08', 'The family suite was perfect for our family vacation.', 5),
+(4, 2, '2023-04-05', 'The executive suite exceeded our expectations. Highly recommended!', 5),
+(5, 5, '2023-05-12', 'The cozy cabin provided a charming and intimate atmosphere.', 4);
+
+# DatPhong
+INSERT INTO dat_phong (ma_phong, ngay_den, ngay_di, so_luong_khach, ma_nguoi_dat) VALUES
+(1, '2023-01-25', '2023-01-30', 2, 1),
+(2, '2023-02-18', '2023-02-22', 1, 2),
+(3, '2023-03-12', '2023-03-20', 4, 3),
+(4, '2023-04-08', '2023-04-12', 2, 4),
+(5, '2023-05-15', '2023-05-20', 2, 5);

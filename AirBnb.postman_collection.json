@@ -1,0 +1,1072 @@
+{
+	"info": {
+		"_postman_id": "2c789435-b29b-4064-bf8b-b091214d6d5d",
+		"name": "AirBnb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29406626"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sign in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ptm2011@gmail.com\",\n    \"pass_word\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"Tuệ My\",\n    \"email\": \"ptm2011@gmail.com\",\n    \"pass_word\": \"123\",\n    \"phone\": \"0776931102\",\n    \"birth_day\": \"2002-11-20\",\n    \"gender\": \"Female\",\n    \"role\": \"User\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BinhLuan",
+			"item": [
+				{
+					"name": "Lấy thông tin bình luận",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/binh-luan",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"binh-luan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Gửi bình luận (accessToken)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDIwNjI4LCJleHAiOjE3MDIwMjQyMjh9.qdesKJTqRPihiyF2GGRya-a_Fa5KiJQhDQUtEdP74mw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ma_phong\": 2,\n    \"ma_nguoi_binh_luan\": 7,\n    \"ngay_binh_luan\": \"2023-12-04T00:00:00.000Z\",\n    \"noi_dung\": \"Quá là ấm cúng và đẹp luôn!\",\n    \"sao_binh_luan\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/binh-luan",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"binh-luan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sửa bình luận (accessToken)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDIwNjI4LCJleHAiOjE3MDIwMjQyMjh9.qdesKJTqRPihiyF2GGRya-a_Fa5KiJQhDQUtEdP74mw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ma_phong\": 1,\n  \"ma_nguoi_binh_luan\": 5,\n  \"ngay_binh_luan\": \"2023-12-08T07:32:55.517Z\",\n  \"noi_dung\": \"Update lại bình luận nhen\",\n  \"sao_binh_luan\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/binh-luan/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"binh-luan",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa bình luận",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDIwNjI4LCJleHAiOjE3MDIwMjQyMjh9.qdesKJTqRPihiyF2GGRya-a_Fa5KiJQhDQUtEdP74mw",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/binh-luan/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"binh-luan",
+								"6"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin bình luận theo mã phòng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/binh-luan/lay-binh-luan-theo-phong/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"binh-luan",
+								"lay-binh-luan-theo-phong",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DatPhong",
+			"item": [
+				{
+					"name": "Lấy thông tin đặt phòng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http:/localhost:8080/api/dat-phong",
+							"host": [
+								"http"
+							],
+							"port": "",
+							"path": [
+								"localhost:8080",
+								"api",
+								"dat-phong"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Đặt phòng",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ma_phong\": 5,\n    \"ngay_den\": \"2023-12-08T08:14:42.529Z\",\n    \"ngay_di\": \"2023-12-12T08:14:42.529Z\",\n    \"so_luong_khach\": 2,\n    \"ma_nguoi_dat\": 7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/dat-phong",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"dat-phong"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin đặt phòng theo id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/dat-phong/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"dat-phong",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thay đổi thông tin đặt phòng",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ma_phong\": 3,\n    \"ngay_den\": \"2023-12-08T08:16:17.311Z\",\n    \"ngay_di\": \"2023-12-13T08:16:17.311Z\",\n    \"so_luong_khach\": 3,\n    \"ma_nguoi_dat\": 6\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/dat-phong/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"dat-phong",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa thông tin đặt phòng",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/dat-phong/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"dat-phong",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin đặt phòng theo id người dùng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/dat-phong/lay-theo-nguoi-dung/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"dat-phong",
+								"lay-theo-nguoi-dung",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NguoiDung",
+			"item": [
+				{
+					"name": "Lấy thông tin người dùng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm người dùng",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"Long ToBi\",\n    \"email\": \"longadmin@gmail.com\",\n    \"pass_word\": \"123\",\n    \"phone\": \"0121237764\",\n    \"birth_day\": \"2002-09-04\",\n    \"gender\": \"Male\",\n    \"role\": \"Admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa người dùng",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phân trang người dùng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung/phan-trang-tim-kiem?pageIndex=2&pageSize=3&keyword=lon",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung",
+								"phan-trang-tim-kiem"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "3"
+								},
+								{
+									"key": "keyword",
+									"value": "lon"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin người dùng theo id người dùng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sửa thông tin người dùng theo id người dùng",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"Long ToBi\",\n    \"pass_word\": \"123\",\n    \"phone\": \"0937451621\",\n    \"birth_day\": \"2002-09-04\",\n    \"gender\": \"Male\",\n    \"role\": \"Admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin người dùng bằng thanh search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung/search/Tu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung",
+								"search",
+								"Tu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload avatar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDIwNjI4LCJleHAiOjE3MDIwMjQyMjh9.qdesKJTqRPihiyF2GGRya-a_Fa5KiJQhDQUtEdP74mw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "formFile",
+									"type": "file",
+									"src": "/Users/thanhlong/Desktop/blue-beetle-min.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/nguoi-dung/upload-avatar?id=7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"nguoi-dung",
+								"upload-avatar"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Phong",
+			"item": [
+				{
+					"name": "Lấy thông tin phòng thuê",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/phong",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm thông tin phòng thuê",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDIwNjI4LCJleHAiOjE3MDIwMjQyMjh9.qdesKJTqRPihiyF2GGRya-a_Fa5KiJQhDQUtEdP74mw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ten_phong\": \"Trâu Vàng\",\n    \"khach\": 30,\n    \"phong_ngu\": 10,\n    \"giuong\": 20,\n    \"phong_tam\": 10,\n    \"mo_ta\": \"Cách trung tâm Đà Lạt 2km\",\n    \"gia_tien\": 100000,\n    \"may_giat\": true,\n    \"ban_la\": false,\n    \"tivi\": true,\n    \"dieu_hoa\": false,\n    \"wifi\": true,\n    \"bep\": true,\n    \"do_xe\": true,\n    \"ho_boi\": false,\n    \"ban_ui\": false,\n    \"ma_vi_tri\": 6,\n    \"hinh_anh\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/phong",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin phòng thuê theo vị trí",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/phong/lay-phong-theo-vi-tri?maViTri=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong",
+								"lay-phong-theo-vi-tri"
+							],
+							"query": [
+								{
+									"key": "maViTri",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phân trang tìm kiếm thông tin phòng thuê",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/phong/phan-trang-tim-kiem?pageIndex=2&pageSize=3&keyword=Tra",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong",
+								"phan-trang-tim-kiem"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "3"
+								},
+								{
+									"key": "keyword",
+									"value": "Tra"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin phòng thuê theo id phòng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/phong/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sửa thông tin phòng thuê theo id phòng",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDI0NTU0LCJleHAiOjE3MDIwMjgxNTR9.suJF57yZNkP30JNBHCJL3Dc8u8a4JTR99D42NHiUMKE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ten_phong\": \"Trâu Vàng 2\",\n  \"khach\": 40,\n  \"phong_ngu\": 10,\n  \"giuong\": 20,\n  \"phong_tam\": 10,\n  \"mo_ta\": \"Cách trung tâm tp Đà Lạt 2km\",\n  \"gia_tien\": 120000,\n  \"may_giat\": true,\n  \"ban_la\": false,\n  \"tivi\": true,\n  \"dieu_hoa\": false,\n  \"wifi\": true,\n  \"bep\": true,\n  \"do_xe\": true,\n  \"ho_boi\": false,\n  \"ban_ui\": false,\n  \"ma_vi_tri\": 6,\n  \"hinh_anh\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/phong/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa phòng thuê theo id phòng",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDI0NTU0LCJleHAiOjE3MDIwMjgxNTR9.suJF57yZNkP30JNBHCJL3Dc8u8a4JTR99D42NHiUMKE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/phong/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload hình ảnh phòng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDI0NTU0LCJleHAiOjE3MDIwMjgxNTR9.suJF57yZNkP30JNBHCJL3Dc8u8a4JTR99D42NHiUMKE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "formFile",
+									"type": "file",
+									"src": "/Users/thanhlong/Desktop/Screenshot 2023-11-10 at 14.52.52-min.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/phong/upload-hinh-phong?maPhong=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"phong",
+								"upload-hinh-phong"
+							],
+							"query": [
+								{
+									"key": "maPhong",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ViTri",
+			"item": [
+				{
+					"name": "Lấy thông tin vị trí",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm thông tin vị trí",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDIwNjI4LCJleHAiOjE3MDIwMjQyMjh9.qdesKJTqRPihiyF2GGRya-a_Fa5KiJQhDQUtEdP74mw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ten_vi_tri\": \"Thành Phố Đà Lạt\",\n    \"tinh_thanh\": \"Lâm Đồng\",\n    \"quoc_gia\": \"VietNam\",\n    \"hinh_anh\": \"dalat.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phân trang vị trí",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri/phan-trang-tim-kiem?pageIndex=1&pageSize=3&keyword=Da",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri",
+								"phan-trang-tim-kiem"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "3"
+								},
+								{
+									"key": "keyword",
+									"value": "Da"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin vị trí theo id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sửa thông tin vị trí theo id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDI0NTU0LCJleHAiOjE3MDIwMjgxNTR9.suJF57yZNkP30JNBHCJL3Dc8u8a4JTR99D42NHiUMKE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ten_vi_tri\": \"tp Đà Lạt\",\n    \"tinh_thanh\": \"Lâm Đồng\",\n    \"quoc_gia\": \"Việt Nam\",\n    \"hinh_anh\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa vị trí theo id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDI0NTU0LCJleHAiOjE3MDIwMjgxNTR9.suJF57yZNkP30JNBHCJL3Dc8u8a4JTR99D42NHiUMKE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload hình ảnh vị trí",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo3LCJlbWFpbCI6InB0bTIwMTFAZ21haWwuY29tIiwiZnVsbF9uYW1lIjoiVHXhu4cgTXkifSwiaWF0IjoxNzAyMDI0NTU0LCJleHAiOjE3MDIwMjgxNTR9.suJF57yZNkP30JNBHCJL3Dc8u8a4JTR99D42NHiUMKE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "formFile",
+									"type": "file",
+									"src": "/Users/thanhlong/Desktop/mona.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/vi-tri/upload-hinh-vi-tri?maViTri=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"vi-tri",
+								"upload-hinh-vi-tri"
+							],
+							"query": [
+								{
+									"key": "maViTri",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
