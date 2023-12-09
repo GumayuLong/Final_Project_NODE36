@@ -94,7 +94,7 @@ export class ViTriService {
             id: Number(idViTri),
           },
         });
-        return deleteData;
+        return 'Xóa vị trí thành công';
       } else if (!checkIdViTri) {
         return 'Mã vị trí không tồn tại!';
       } else if (checkViTriPhong) {

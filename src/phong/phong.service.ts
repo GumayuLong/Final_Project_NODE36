@@ -4,6 +4,7 @@ import { UpdatePhongDto } from './dto/update-phong.dto';
 import { PrismaClient } from '@prisma/client';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ppid } from 'process';
 
 @Injectable()
 export class PhongService {
@@ -62,11 +63,20 @@ export class PhongService {
         hinh_anh,
       };
 
-      let createPhong = await this.prisma.phong.create({
-        data: newPhongThue,
+      let checkMaViTri = await this.prisma.vi_tri.findFirst({
+        where: {
+          id: ma_vi_tri,
+        },
       });
+      if (checkMaViTri) {
+        let createPhong = await this.prisma.phong.create({
+          data: newPhongThue,
+        });
 
-      return createPhong;
+        return createPhong;
+      } else {
+        return 'Mã vị trí không tồn tại!';
+      }
     } catch {
       return 'Lỗi BE!';
     }
