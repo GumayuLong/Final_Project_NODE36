@@ -141,7 +141,6 @@ export class PhongService {
         ho_boi,
         ban_ui,
         ma_vi_tri,
-        hinh_anh,
       } = body;
       let checkIdPhong = await this.prisma.phong.findFirst({
         where: {
@@ -172,7 +171,6 @@ export class PhongService {
           ho_boi,
           ban_ui,
           ma_vi_tri,
-          hinh_anh,
         };
         let update = await this.prisma.phong.update({
           where: {

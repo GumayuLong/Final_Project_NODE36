@@ -71,7 +71,4 @@ export class UpdatePhongDto extends PartialType(CreatePhongDto) {
   @IsNotEmpty({ message: 'ma_vi_tri không được bỏ trống!' })
   @ApiProperty()
   ma_vi_tri: number;
-
-  @ApiProperty()
-  hinh_anh: string;
 }

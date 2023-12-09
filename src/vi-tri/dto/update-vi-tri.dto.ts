@@ -15,7 +15,4 @@ export class UpdateViTriDto extends PartialType(CreateViTriDto) {
   @IsNotEmpty({ message: 'quoc_gia không được bỏ trống' })
   @ApiProperty()
   quoc_gia: string;
-
-  @ApiProperty()
-  hinh_anh: string;
 }

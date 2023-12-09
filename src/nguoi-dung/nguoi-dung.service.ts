@@ -55,15 +55,22 @@ export class NguoiDungService {
           id: Number(id),
         },
       });
-      if (checkMail) {
+      let checkDatPhong = await this.prisma.dat_phong.findFirst({
+        where: {
+          ma_nguoi_dat: Number(id),
+        },
+      });
+      if (checkMail && !checkDatPhong) {
         let deleteUser = await this.prisma.nguoi_dung.delete({
           where: {
             id: Number(id),
           },
         });
         return 'Xóa người dùng thành công';
-      } else {
+      } else if (!checkMail) {
         return 'Người dùng không tồn tại!';
+      } else if (checkDatPhong) {
+        return 'Người dùng này đã đặt phòng, không thể xóa!';
       }
     } catch {
       return 'Lỗi BE!';
@@ -191,7 +198,7 @@ export class NguoiDungService {
         });
         return upload;
       } else {
-        return 'Mã phòng không tồn tại';
+        return 'Mã người dùng không tồn tại!';
       }
     } catch {
       return 'Lỗi BE!';

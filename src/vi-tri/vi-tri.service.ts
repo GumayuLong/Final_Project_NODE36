@@ -53,14 +53,14 @@ export class ViTriService {
 
   async updateLocationApi(body: UpdateViTriDto, idViTri): Promise<any> {
     try {
-      let { ten_vi_tri, tinh_thanh, quoc_gia, hinh_anh } = body;
+      let { ten_vi_tri, tinh_thanh, quoc_gia } = body;
       let checkIdViTri = await this.prisma.vi_tri.findFirst({
         where: {
           id: Number(idViTri),
         },
       });
       if (checkIdViTri) {
-        let newUpdate = { ten_vi_tri, tinh_thanh, quoc_gia, hinh_anh };
+        let newUpdate = { ten_vi_tri, tinh_thanh, quoc_gia };
         let updateData = await this.prisma.vi_tri.update({
           where: {
             id: Number(idViTri),
