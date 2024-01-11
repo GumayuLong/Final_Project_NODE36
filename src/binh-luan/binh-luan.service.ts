@@ -13,12 +13,12 @@ export class BinhLuanService {
   ) {}
   prisma = new PrismaClient();
 
-  async fetchBinhLuanApi(): Promise<any> {
+  async fetchBinhLuanApi(res): Promise<any> {
     try {
       let data = await this.prisma.binh_luan.findMany();
-      return data;
+      return res.status(200).send(data);
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
@@ -45,7 +45,7 @@ export class BinhLuanService {
   //   return newBinhLuan;
   // }
 
-  async createBinhLuanApi(body: CreateBinhLuanDto): Promise<any> {
+  async createBinhLuanApi(body: CreateBinhLuanDto, res): Promise<any> {
     try {
       let {
         ma_phong,
@@ -79,18 +79,18 @@ export class BinhLuanService {
         let newBinhLuan = await this.prisma.binh_luan.create({
           data: data,
         });
-        return newBinhLuan;
+        return res.status(201).send(newBinhLuan);
       } else if (!checkMaPhong) {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       } else if (!checkMaNguoiBinhLuan) {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async updateBinhLuan(body: UpdateBinhLuanDto, idBinhLuan): Promise<any> {
+  async updateBinhLuan(body: UpdateBinhLuanDto, idBinhLuan, res): Promise<any> {
     try {
       let {
         ma_phong,
@@ -134,20 +134,20 @@ export class BinhLuanService {
           },
           data: updateData,
         });
-        return updateBinhLuan;
+        return res.status(201).send(updateBinhLuan);
       } else if (!checkMaPhong) {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       } else if (!checkMaNguoiBinhLuan) {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       } else if (!checkId) {
-        return 'Mã bình luận không tồn tại!';
+        return res.status(404).send('Mã bình luận không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async deleteBinhLuanApi(idBinhLuan: number): Promise<any> {
+  async deleteBinhLuanApi(idBinhLuan: number, res): Promise<any> {
     try {
       let checkId = await this.prisma.binh_luan.findFirst({
         where: {
@@ -161,16 +161,16 @@ export class BinhLuanService {
             id: Number(idBinhLuan),
           },
         });
-        return 'Xóa bình luận thành công!';
+        return res.status(201).send('Xóa bình luận thành công!');
       } else {
-        return 'Mã bình luận không tồn tại';
+        return res.status(404).send('Mã bình luận không tồn tại');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getInfoBinhLuanTheoMaPhongApi(maPhong: number): Promise<any> {
+  async getInfoBinhLuanTheoMaPhongApi(maPhong: number, res): Promise<any> {
     try {
       let checkId = await this.prisma.binh_luan.findFirst({
         where: {
@@ -183,12 +183,12 @@ export class BinhLuanService {
             ma_phong: Number(maPhong),
           },
         });
-        return data;
+        return res.status(200).send(data);
       } else {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 }

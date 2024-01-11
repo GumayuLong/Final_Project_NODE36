@@ -7,29 +7,29 @@ import { PrismaClient } from '@prisma/client';
 export class ViTriService {
   prisma = new PrismaClient();
 
-  async fetchViTriApi(): Promise<any> {
+  async fetchViTriApi(res): Promise<any> {
     try {
       let data = await this.prisma.vi_tri.findMany();
-      return data;
+      return res.status(200).send(data);
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async createViTriApi(body: CreateViTriDto): Promise<any> {
+  async createViTriApi(body: CreateViTriDto, res): Promise<any> {
     try {
       let { ten_vi_tri, tinh_thanh, quoc_gia, hinh_anh } = body;
       let data = { ten_vi_tri, tinh_thanh, quoc_gia, hinh_anh };
       let newData = await this.prisma.vi_tri.create({
         data: data,
       });
-      return newData;
+      return res.status(201).send(newData);
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getInfoLocationBaseOnId(idViTri): Promise<any> {
+  async getInfoLocationBaseOnId(idViTri, res): Promise<any> {
     try {
       let checkIdVitri = await this.prisma.vi_tri.findFirst({
         where: {
@@ -42,16 +42,16 @@ export class ViTriService {
             id: Number(idViTri),
           },
         });
-        return data;
+        return res.status(200).send(data);
       } else {
-        return 'Mã vị trí không tồn tại!';
+        return res.status(404).send('Mã vị trí không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async updateLocationApi(body: UpdateViTriDto, idViTri): Promise<any> {
+  async updateLocationApi(body: UpdateViTriDto, idViTri, res): Promise<any> {
     try {
       let { ten_vi_tri, tinh_thanh, quoc_gia } = body;
       let checkIdViTri = await this.prisma.vi_tri.findFirst({
@@ -67,16 +67,16 @@ export class ViTriService {
           },
           data: newUpdate,
         });
-        return updateData;
+        return res.status(201).send(updateData);
       } else {
-        return 'Mã vị trí không tồn tại!';
+        return res.status(404).send('Mã vị trí không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async deleteLocationApi(idViTri): Promise<any> {
+  async deleteLocationApi(idViTri, res): Promise<any> {
     try {
       let checkIdViTri = await this.prisma.vi_tri.findFirst({
         where: {
@@ -94,18 +94,20 @@ export class ViTriService {
             id: Number(idViTri),
           },
         });
-        return 'Xóa vị trí thành công';
+        return res.status(201).send('Xóa vị trí thành công');
       } else if (!checkIdViTri) {
-        return 'Mã vị trí không tồn tại!';
+        return res.status(404).send('Mã vị trí không tồn tại!');
       } else if (checkViTriPhong) {
-        return 'Vị trí đã được dùng trong table phong, không thể xóa!';
+        return res
+          .status(400)
+          .send('Vị trí đã được dùng trong table phong, không thể xóa!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async phanTrangViTriApi(pageIndex, pageSize, keyword): Promise<any> {
+  async phanTrangViTriApi(pageIndex, pageSize, keyword, res): Promise<any> {
     try {
       let data = await this.prisma.vi_tri.findMany({
         skip: (Number(pageIndex) - 1) * Number(pageSize),
@@ -119,18 +121,18 @@ export class ViTriService {
         },
       });
       if (data.length !== 0 && !keyword) {
-        return data;
+        return res.status(201).send(data);
       } else if (data.length !== 0 && keyword) {
-        return findKeyWord;
+        return res.status(201).send(findKeyWord);
       } else if (data.length === 0) {
-        return 'Không phân được trang!';
+        return res.status(400).send('Không phân được trang!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async uploadHinhViTriApi(maViTri, file): Promise<any> {
+  async uploadHinhViTriApi(maViTri, file, res): Promise<any> {
     try {
       let checkMaViTri = await this.prisma.vi_tri.findFirst({
         where: {
@@ -150,12 +152,12 @@ export class ViTriService {
           },
           data: newHinh,
         });
-        return upload;
+        return res.status(201).send(upload);
       } else {
-        return 'Mã vị trí không tồn tại';
+        return res.status(404).send('Mã vị trí không tồn tại');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 }

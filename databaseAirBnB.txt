@@ -1,3 +1,4 @@
+# DROP DATABASE BEfinal
 CREATE DATABASE BEfinal;
 
 USE BEfinal;
@@ -75,12 +76,14 @@ CREATE TABLE dat_phong(
 # INSERT DATA
 
 # NguoiDung
-INSERT INTO nguoi_dung (full_name, email, pass_word, phone, birth_day, gender, role, avatar) VALUES
-('John Doe', 'john.doe@example.com', 'password123', '1234567890', '1990-05-15', 'Male', 'User', 'avatar1.png'),
-('Jane Smith', 'jane.smith@example.com', 'pass456', '9876543210', '1988-09-22', 'Female', 'User', 'avatar2.png'),
-('Bob Johnson', 'bob.johnson@example.com', 'abc@123', '5551112233', '1995-02-10', 'Male', 'User', 'avatar3.png'),
-('Alice Brown', 'alice.brown@example.com', 'securePass', '7778889999', '1992-11-08', 'Female', 'Admin', 'avatar4.png'),
-('Charlie Davis', 'charlie.davis@example.com', 'strongPassword', '4445556666', '1985-07-03', 'Male', 'User', 'avatar5.png');
+INSERT INTO nguoi_dung (full_name, email, pass_word, phone, birth_day, gender, role, avatar)
+VALUES
+  ('Nguyen Van A', 'nguyenvana@example.com', 'hashed_password_1', '123456789', '1990-05-15', 'Male', 'true', 'avatar_a.jpg'),
+  ('Tran Thi B', 'tranthib@example.com', 'hashed_password_2', '987654321', '1985-08-21', 'Female', 'false', 'avatar_b.jpg'),
+  ('Le Van C', 'levanc@example.com', 'hashed_password_3', '456789123', '1995-03-10', 'Male', 'false', 'avatar_c.jpg'),
+  ('Pham Thi D', 'phamthid@example.com', 'hashed_password_4', '741852963', '1992-11-30', 'Female', 'false', 'avatar_d.jpg'),
+  ('Hoang Van E', 'hoangvane@example.com', 'hashed_password_5', '369258147', '1988-07-05', 'Male', 'true', 'avatar_e.jpg');
+
 
 # ViTri
 INSERT INTO vi_tri (ten_vi_tri, tinh_thanh, quoc_gia, hinh_anh) VALUES

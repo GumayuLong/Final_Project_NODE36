@@ -10,16 +10,16 @@ import { ppid } from 'process';
 export class PhongService {
   prisma = new PrismaClient();
 
-  async fetchPhongThueApi(): Promise<any> {
+  async fetchPhongThueApi(res): Promise<any> {
     try {
       let data = await this.prisma.phong.findMany();
-      return data;
+      return res.status(200).send(data);
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async createPhongThueApi(body: CreatePhongDto): Promise<any> {
+  async createPhongThueApi(body: CreatePhongDto, res): Promise<any> {
     try {
       let {
         ten_phong,
@@ -73,16 +73,16 @@ export class PhongService {
           data: newPhongThue,
         });
 
-        return createPhong;
+        return res.status(201).send(createPhong);
       } else {
-        return 'Mã vị trí không tồn tại!';
+        return res.status(404).send('Mã vị trí không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getPhongBaseOneLocationApi(maViTri): Promise<any> {
+  async getPhongBaseOneLocationApi(maViTri, res): Promise<any> {
     try {
       let checkMaViTri = await this.prisma.vi_tri.findFirst({
         where: {
@@ -97,19 +97,19 @@ export class PhongService {
           },
         });
         if (data.length !== 0) {
-          return data;
+          return res.status(200).send(data);
         } else {
-          return 'Vị trí này chưa có phòng!';
+          return res.status(404).send('Vị trí này chưa có phòng!');
         }
       } else {
-        return 'Mã vị trí không tổn tại';
+        return res.status(404).send('Mã vị trí không tổn tại');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getPhongBaseOnIdApi(idPhong): Promise<any> {
+  async getPhongBaseOnIdApi(idPhong, res): Promise<any> {
     try {
       let checkIdPhong = await this.prisma.phong.findFirst({
         where: {
@@ -122,16 +122,16 @@ export class PhongService {
             id: Number(idPhong),
           },
         });
-        return data;
+        return res.status(200).send(data);
       } else {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async updatePhongThueApi(body: UpdatePhongDto, idPhong): Promise<any> {
+  async updatePhongThueApi(body: UpdatePhongDto, idPhong, res): Promise<any> {
     try {
       let {
         ten_phong,
@@ -188,18 +188,18 @@ export class PhongService {
           },
           data: dataUpdate,
         });
-        return update;
+        return res.status(201).send(update);
       } else if (!checkIdPhong) {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       } else if (!checkMaViTri) {
-        return 'Mã vị trí không tồn tại!';
+        return res.status(404).send('Mã vị trí không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async deletePhongThueApi(idPhong): Promise<any> {
+  async deletePhongThueApi(idPhong, res): Promise<any> {
     try {
       let checkIdPhong = await this.prisma.phong.findFirst({
         where: {
@@ -217,18 +217,20 @@ export class PhongService {
             id: Number(idPhong),
           },
         });
-        return 'Xóa phòng thành công';
+        return res.status(201).send('Xóa phòng thành công');
       } else if (checkBookedRoom) {
-        return 'Phòng đã được đặt, không thể xóa phòng này!';
+        return res
+          .status(404)
+          .send('Phòng đã được đặt, không thể xóa phòng này!');
       } else if (!checkIdPhong) {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async phanTrangPhongApi(pageIndex, pageSize, keyword): Promise<any> {
+  async phanTrangPhongApi(pageIndex, pageSize, keyword, res): Promise<any> {
     try {
       let data = await this.prisma.phong.findMany({
         skip: (Number(pageIndex) - 1) * Number(pageSize),
@@ -242,18 +244,18 @@ export class PhongService {
         },
       });
       if (data.length !== 0 && !keyword) {
-        return data;
+        return res.status(200).send(data);
       } else if (data.length !== 0 && keyword) {
-        return findKeyWord;
+        return res.status(200).send(findKeyWord);
       } else if (data.length === 0) {
-        return 'Không phân được trang!';
+        return res.status(400).send('Không phân được trang!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async uploadHinhPhongApi(maPhong, file): Promise<any> {
+  async uploadHinhPhongApi(maPhong, file, res): Promise<any> {
     try {
       let checkMaPhong = await this.prisma.phong.findFirst({
         where: {
@@ -273,12 +275,12 @@ export class PhongService {
           },
           data: newHinh,
         });
-        return upload;
+        return res.status(201).send(upload);
       } else {
-        return 'Mã phòng không tồn tại';
+        return res.status(404).send('Mã phòng không tồn tại');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 }

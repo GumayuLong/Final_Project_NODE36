@@ -11,6 +11,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 import { ViTriService } from './vi-tri.service';
 import { CreateViTriDto } from './dto/create-vi-tri.dto';
@@ -33,15 +34,15 @@ export class ViTriController {
   constructor(private readonly viTriService: ViTriService) {}
 
   @Get()
-  fetchViTri(): any {
-    return this.viTriService.fetchViTriApi();
+  fetchViTri(@Res() res): any {
+    return this.viTriService.fetchViTriApi(res);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  createViTri(@Body() body: CreateViTriDto): any {
-    return this.viTriService.createViTriApi(body);
+  createViTri(@Body() body: CreateViTriDto, @Res() res): any {
+    return this.viTriService.createViTriApi(body, res);
   }
 
   @Get('/phan-trang-tim-kiem')
@@ -64,8 +65,14 @@ export class ViTriController {
     @Query('pageIndex') pageIndex: number,
     @Query('pageSize') pageSize: number,
     @Query('keyword') keyword: string,
+    @Res() res,
   ): any {
-    return this.viTriService.phanTrangViTriApi(pageIndex, pageSize, keyword);
+    return this.viTriService.phanTrangViTriApi(
+      pageIndex,
+      pageSize,
+      keyword,
+      res,
+    );
   }
 
   @ApiBearerAuth()
@@ -86,26 +93,31 @@ export class ViTriController {
   async uploadAva(
     @Query('maViTri') maViTri: number,
     @UploadedFile() file: Express.Multer.File,
+    @Res() res,
   ) {
-    return this.viTriService.uploadHinhViTriApi(maViTri, file);
+    return this.viTriService.uploadHinhViTriApi(maViTri, file, res);
   }
 
   @Get('/:id')
-  getInfoLocation(@Param('id') idViTri: number): any {
-    return this.viTriService.getInfoLocationBaseOnId(idViTri);
+  getInfoLocation(@Param('id') idViTri: number, @Res() res): any {
+    return this.viTriService.getInfoLocationBaseOnId(idViTri, res);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Put('/:id')
-  updateViTri(@Body() body: UpdateViTriDto, @Param('id') idViTri: number): any {
-    return this.viTriService.updateLocationApi(body, idViTri);
+  updateViTri(
+    @Body() body: UpdateViTriDto,
+    @Param('id') idViTri: number,
+    @Res() res,
+  ): any {
+    return this.viTriService.updateLocationApi(body, idViTri, res);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Delete('/:id')
-  deleteViTri(@Param('id') idViTri: number): any {
-    return this.viTriService.deleteLocationApi(idViTri);
+  deleteViTri(@Param('id') idViTri: number, @Res() res): any {
+    return this.viTriService.deleteLocationApi(idViTri, res);
   }
 }

@@ -10,6 +10,7 @@ import {
   Put,
   UseInterceptors,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 import { PhongService } from './phong.service';
 import { CreatePhongDto } from './dto/create-phong.dto';
@@ -34,20 +35,20 @@ export class PhongController {
   constructor(private readonly phongService: PhongService) {}
 
   @Get()
-  fetchPhongThue(): any {
-    return this.phongService.fetchPhongThueApi();
+  fetchPhongThue(@Res() res): any {
+    return this.phongService.fetchPhongThueApi(res);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  createPhongThue(@Body() body: CreatePhongDto): any {
-    return this.phongService.createPhongThueApi(body);
+  createPhongThue(@Body() body: CreatePhongDto, @Res() res): any {
+    return this.phongService.createPhongThueApi(body, res);
   }
 
   @Get('/lay-phong-theo-vi-tri')
-  getPhongBaseOnLocation(@Query('maViTri') maViTri: number): any {
-    return this.phongService.getPhongBaseOneLocationApi(maViTri);
+  getPhongBaseOnLocation(@Query('maViTri') maViTri: number, @Res() res): any {
+    return this.phongService.getPhongBaseOneLocationApi(maViTri, res);
   }
 
   @Get('/phan-trang-tim-kiem')
@@ -70,8 +71,14 @@ export class PhongController {
     @Query('pageIndex') pageIndex: number,
     @Query('pageSize') pageSize: number,
     @Query('keyword') keyword: string,
+    @Res() res,
   ): any {
-    return this.phongService.phanTrangPhongApi(pageIndex, pageSize, keyword);
+    return this.phongService.phanTrangPhongApi(
+      pageIndex,
+      pageSize,
+      keyword,
+      res,
+    );
   }
 
   @ApiBearerAuth()
@@ -92,13 +99,14 @@ export class PhongController {
   async uploadAva(
     @Query('maPhong') maPhong: number,
     @UploadedFile() file: Express.Multer.File,
+    @Res() res,
   ) {
-    return this.phongService.uploadHinhPhongApi(maPhong, file);
+    return this.phongService.uploadHinhPhongApi(maPhong, file, res);
   }
 
   @Get('/:id')
-  getPhongBaseOnId(@Param('id') idPhong: number): any {
-    return this.phongService.getPhongBaseOnIdApi(idPhong);
+  getPhongBaseOnId(@Param('id') idPhong: number, @Res() res): any {
+    return this.phongService.getPhongBaseOnIdApi(idPhong, res);
   }
 
   @ApiBearerAuth()
@@ -107,14 +115,15 @@ export class PhongController {
   updatePhongThue(
     @Body() body: UpdatePhongDto,
     @Param('id') idPhong: number,
+    @Res() res,
   ): any {
-    return this.phongService.updatePhongThueApi(body, idPhong);
+    return this.phongService.updatePhongThueApi(body, idPhong, res);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Delete('/:id')
-  deletePhongThue(@Param('id') idPhong: number): any {
-    return this.phongService.deletePhongThueApi(idPhong);
+  deletePhongThue(@Param('id') idPhong: number, @Res() res): any {
+    return this.phongService.deletePhongThueApi(idPhong, res);
   }
 }

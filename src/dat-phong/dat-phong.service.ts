@@ -6,16 +6,16 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class DatPhongService {
   prisma = new PrismaClient();
-  async fetchDatPhongApi(): Promise<any> {
+  async fetchDatPhongApi(res): Promise<any> {
     try {
       let data = await this.prisma.dat_phong.findMany({});
-      return data;
+      return res.status(200).send(data);
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async createDatPhongApi(body: CreateDatPhongDto): Promise<any> {
+  async createDatPhongApi(body: CreateDatPhongDto, res): Promise<any> {
     try {
       let { ma_phong, ngay_den, ngay_di, so_luong_khach, ma_nguoi_dat } = body;
       let checkMaPhong = await this.prisma.phong.findFirst({
@@ -39,18 +39,18 @@ export class DatPhongService {
         let datPhong = await this.prisma.dat_phong.create({
           data: newDatPhong,
         });
-        return datPhong;
+        return res.status(201).send(datPhong);
       } else if (!checkMaPhong) {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       } else if (!checkMaNguoiDat) {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getInfoDatPhongTheoIdApi(idDatPhong): Promise<any> {
+  async getInfoDatPhongTheoIdApi(idDatPhong, res): Promise<any> {
     try {
       let checkMaDatPhong = await this.prisma.dat_phong.findFirst({
         where: {
@@ -63,16 +63,16 @@ export class DatPhongService {
             id: Number(idDatPhong),
           },
         });
-        return findInfoDatPhongBaseOnId;
+        return res.status(201).send(findInfoDatPhongBaseOnId);
       } else {
-        return 'Mã đặt phòng không tồn tại!';
+        return res.status(404).send('Mã đặt phòng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async updateDatPhongApi(body, idDatPhong): Promise<any> {
+  async updateDatPhongApi(body, idDatPhong, res): Promise<any> {
     try {
       let { ma_phong, ngay_den, ngay_di, so_luong_khach, ma_nguoi_dat } = body;
       let checkMaPhong = await this.prisma.phong.findFirst({
@@ -104,20 +104,20 @@ export class DatPhongService {
           },
           data: updateData,
         });
-        return update;
+        return res.status(201).send(update);
       } else if (!checkMaDatPhong) {
-        return 'Mã đặt phòng không tồn tại!';
+        return res.status(404).send('Mã đặt phòng không tồn tại!');
       } else if (!checkMaNguoiDat) {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       } else if (!checkMaPhong) {
-        return 'Mã phòng không tồn tại!';
+        return res.status(404).send('Mã phòng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async deleteDatPhongApi(idDatPhong): Promise<any> {
+  async deleteDatPhongApi(idDatPhong, res): Promise<any> {
     try {
       let checkMaDatPhong = await this.prisma.dat_phong.findFirst({
         where: {
@@ -130,16 +130,16 @@ export class DatPhongService {
             id: Number(idDatPhong),
           },
         });
-        return 'Xóa thông tin đặt phòng thành công!';
+        return res.status(201).send('Xóa thông tin đặt phòng thành công!');
       } else {
-        return 'Mã đặt phòng không tồn tại!';
+        return res.status(404).send('Mã đặt phòng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getInfoDatPhongBaseOnNguoiDung(maNguoiDung): Promise<any> {
+  async getInfoDatPhongBaseOnNguoiDung(maNguoiDung, res): Promise<any> {
     try {
       let checkMaNguoiDung = await this.prisma.nguoi_dung.findFirst({
         where: {
@@ -152,12 +152,12 @@ export class DatPhongService {
             ma_nguoi_dat: Number(maNguoiDung),
           },
         });
-        return getInfo;
+        return res.status(200).send(getInfo);
       } else {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 }

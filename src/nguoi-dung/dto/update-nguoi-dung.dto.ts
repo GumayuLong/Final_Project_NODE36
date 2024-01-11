@@ -8,9 +8,9 @@ export class UpdateNguoiDungDto extends PartialType(CreateNguoiDungDto) {
   @ApiProperty()
   full_name: string;
 
-  @IsNotEmpty({ message: 'pass_word không được bỏ trống!' })
-  @ApiProperty()
-  pass_word: string;
+  // @IsNotEmpty({ message: 'pass_word không được bỏ trống!' })
+  // @ApiProperty()
+  // pass_word: string;
 
   @IsNotEmpty({ message: 'phone không được bỏ trống!' })
   @ApiProperty()

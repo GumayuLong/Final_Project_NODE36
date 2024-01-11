@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Put,
+  Res,
 } from '@nestjs/common';
 import { BinhLuanService } from './binh-luan.service';
 import { CreateBinhLuanDto } from './dto/create-binh-luan.dto';
@@ -25,8 +26,8 @@ export class BinhLuanController {
   ) {}
 
   @Get()
-  getBinhLuan(): any {
-    return this.binhLuanService.fetchBinhLuanApi();
+  getBinhLuan(@Res() res): any {
+    return this.binhLuanService.fetchBinhLuanApi(res);
   }
 
   // @ApiBearerAuth()
@@ -40,8 +41,8 @@ export class BinhLuanController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  createBinhLuan(@Body() body: CreateBinhLuanDto): any {
-    return this.binhLuanService.createBinhLuanApi(body);
+  createBinhLuan(@Body() body: CreateBinhLuanDto, @Res() res): any {
+    return this.binhLuanService.createBinhLuanApi(body, res);
   }
 
   @ApiBearerAuth()
@@ -50,19 +51,23 @@ export class BinhLuanController {
   updateBinhLuan(
     @Body() body: UpdateBinhLuanDto,
     @Param('id') idBinhLuan: number,
+    @Res() res,
   ): any {
-    return this.binhLuanService.updateBinhLuan(body, idBinhLuan);
+    return this.binhLuanService.updateBinhLuan(body, idBinhLuan, res);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Delete('/:id')
-  deleteBinhLuan(@Param('id') idBinhLuan: number): any {
-    return this.binhLuanService.deleteBinhLuanApi(idBinhLuan);
+  deleteBinhLuan(@Param('id') idBinhLuan: number, @Res() res): any {
+    return this.binhLuanService.deleteBinhLuanApi(idBinhLuan, res);
   }
 
   @Get('/lay-binh-luan-theo-phong/:MaPhong')
-  getInfoBinhLuanTheoMaPhong(@Param('MaPhong') maPhong: number): any {
-    return this.binhLuanService.getInfoBinhLuanTheoMaPhongApi(maPhong);
+  getInfoBinhLuanTheoMaPhong(
+    @Param('MaPhong') maPhong: number,
+    @Res() res,
+  ): any {
+    return this.binhLuanService.getInfoBinhLuanTheoMaPhongApi(maPhong, res);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { registerAuthDTO } from './dto/register-auth.dto';
 import { loginAuthDto } from './dto/login-auth.dto';
@@ -15,7 +15,7 @@ export class AuthService {
 
   prisma = new PrismaClient();
 
-  async signIn(body: loginAuthDto): Promise<string> {
+  async signIn(body: loginAuthDto, res): Promise<string> {
     let { email, pass_word } = body;
     let checkEmail = await this.prisma.nguoi_dung.findFirst({
       where: {
@@ -29,6 +29,7 @@ export class AuthService {
           id: checkEmail.id,
           email,
           full_name: checkEmail.full_name,
+          role: checkEmail.role,
         };
         let token = this.jwtService.sign(
           { data: data },
@@ -37,16 +38,16 @@ export class AuthService {
             secret: this.configService.get('SECRET_KEY'),
           },
         );
-        return token;
+        return res.status(200).send({ token, data });
       } else {
-        return 'Password không hợp lệ!';
+        return res.status(404).send('Password không hợp lệ!');
       }
     } else {
-      return 'Email không hợp lệ!';
+      return res.status(404).send('Email không đúng!');
     }
   }
 
-  async signUp(body: registerAuthDTO): Promise<any> {
+  async signUp(body: registerAuthDTO, res): Promise<any> {
     let { full_name, email, pass_word, phone, birth_day, gender, role } = body;
     let checkMail = await this.prisma.nguoi_dung.findFirst({
       where: {
@@ -67,9 +68,9 @@ export class AuthService {
       let newUser = await this.prisma.nguoi_dung.create({
         data: createUser,
       });
-      return newUser;
+      return res.status(201).send(newUser);
     } else {
-      return 'Email đã tồn tại!';
+      return res.status(401).send('Email đã tồn tại!');
     }
   }
 }

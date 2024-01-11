@@ -7,16 +7,16 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class NguoiDungService {
   prisma = new PrismaClient();
-  async fetchNguoiDungApi(): Promise<any> {
+  async fetchNguoiDungApi(res): Promise<any> {
     try {
       let getData = await this.prisma.nguoi_dung.findMany();
-      return getData;
+      return res.status(200).send(getData);
     } catch {
-      return 'Lỗi BE!';
+      return res.status(400).send('Không lấy được dữ liệu người dùng!');
     }
   }
 
-  async createNguoiDungApi(body: CreateNguoiDungDto): Promise<any> {
+  async createNguoiDungApi(body: CreateNguoiDungDto, res): Promise<any> {
     try {
       let { full_name, email, pass_word, phone, birth_day, gender, role } =
         body;
@@ -39,16 +39,16 @@ export class NguoiDungService {
         let createNguoiDung = await this.prisma.nguoi_dung.create({
           data: newData,
         });
-        return createNguoiDung;
+        return res.status(201).send(createNguoiDung);
       } else {
-        return 'Email đã tồn tại!';
+        return res.status(400).send('Email đã tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async deleteNguoiDungApi(id): Promise<any> {
+  async deleteNguoiDungApi(id, res): Promise<any> {
     try {
       let checkMail = await this.prisma.nguoi_dung.findFirst({
         where: {
@@ -66,18 +66,20 @@ export class NguoiDungService {
             id: Number(id),
           },
         });
-        return 'Xóa người dùng thành công';
+        return res.status(200).send('Xóa người dùng thành công');
       } else if (!checkMail) {
-        return 'Người dùng không tồn tại!';
+        return res.status(404).send('Người dùng không tồn tại!');
       } else if (checkDatPhong) {
-        return 'Người dùng này đã đặt phòng, không thể xóa!';
+        return res
+          .status(404)
+          .send('Người dùng này đã đặt phòng, không thể xóa!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async getInfoNguoiDungTheoIdApi(id): Promise<any> {
+  async getInfoNguoiDungTheoIdApi(id, res): Promise<any> {
     try {
       let checkId = await this.prisma.nguoi_dung.findFirst({
         where: {
@@ -90,28 +92,28 @@ export class NguoiDungService {
             id: Number(id),
           },
         });
-        return getData;
+        return res.status(200).send(getData);
       } else {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(400).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async updateNguoiDungApi(body: UpdateNguoiDungDto, id): Promise<any> {
+  async updateNguoiDungApi(body: UpdateNguoiDungDto, id, res): Promise<any> {
     try {
-      let { full_name, pass_word, phone, birth_day, gender, role } = body;
+      let { full_name, phone, birth_day, gender, role } = body;
       let checkId = await this.prisma.nguoi_dung.findFirst({
         where: {
           id: Number(id),
         },
       });
       if (checkId) {
-        let hashPassword = bcrypt.hashSync(pass_word, 10);
+        // let hashPassword = bcrypt.hashSync(pass_word, 10);
         let newUpdate = {
           full_name,
-          pass_word: hashPassword,
+          // pass_word: hashPassword,
           phone,
           birth_day,
           gender,
@@ -123,16 +125,16 @@ export class NguoiDungService {
           },
           data: newUpdate,
         });
-        return updateData;
+        return res.status(201).send(updateData);
       } else if (!checkId) {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async searchNguoiDungApi(tenNguoiDung): Promise<any> {
+  async searchNguoiDungApi(tenNguoiDung, res): Promise<any> {
     try {
       let data = await this.prisma.nguoi_dung.findMany({
         where: {
@@ -142,16 +144,16 @@ export class NguoiDungService {
         },
       });
       if (data.length !== 0) {
-        return data;
+        return res.status(200).send(data);
       } else {
-        return 'Người dùng không tổn tại!';
+        return res.status(404).send('Người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async phanTrangUserApi(pageIndex, pageSize, keyword): Promise<any> {
+  async phanTrangUserApi(pageIndex, pageSize, keyword, res): Promise<any> {
     try {
       let data = await this.prisma.nguoi_dung.findMany({
         skip: (Number(pageIndex) - 1) * Number(pageSize),
@@ -165,18 +167,20 @@ export class NguoiDungService {
         },
       });
       if (data.length !== 0 && !keyword) {
-        return data;
+        return res.status(200).send(data);
       } else if (keyword) {
-        return findKey;
+        return res.status(200).send(findKey);
       } else {
-        return 'Không thể phân trang hoặc không có keyword!';
+        return res
+          .status(400)
+          .send('Không thể phân trang hoặc không có keyword!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 
-  async uploadAvatar(id, file): Promise<any> {
+  async uploadAvatar(id, file, res): Promise<any> {
     try {
       let checkUserId = await this.prisma.nguoi_dung.findFirst({
         where: {
@@ -196,12 +200,12 @@ export class NguoiDungService {
           },
           data: newHinh,
         });
-        return upload;
+        return res.status(201).send(upload);
       } else {
-        return 'Mã người dùng không tồn tại!';
+        return res.status(404).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return 'Lỗi BE!';
+      return res.status(500).send('Lỗi BE!');
     }
   }
 }

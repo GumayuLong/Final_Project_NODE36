@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  Res,
 } from '@nestjs/common';
 import { DatPhongService } from './dat-phong.service';
 import { CreateDatPhongDto } from './dto/create-dat-phong.dto';
@@ -18,35 +19,42 @@ export class DatPhongController {
   constructor(private readonly datPhongService: DatPhongService) {}
 
   @Get()
-  fetchDatPhong(): any {
-    return this.datPhongService.fetchDatPhongApi();
+  fetchDatPhong(@Res() res): any {
+    return this.datPhongService.fetchDatPhongApi(res);
   }
 
   @Post()
-  createDatPhong(@Body() body: CreateDatPhongDto): any {
-    return this.datPhongService.createDatPhongApi(body);
+  createDatPhong(@Body() body: CreateDatPhongDto, @Res() res): any {
+    return this.datPhongService.createDatPhongApi(body, res);
   }
 
   @Get('/:id')
-  getInfoDatPhongTheoId(@Param('id') idDatPhong: number): any {
-    return this.datPhongService.getInfoDatPhongTheoIdApi(idDatPhong);
+  getInfoDatPhongTheoId(@Param('id') idDatPhong: number, @Res() res): any {
+    return this.datPhongService.getInfoDatPhongTheoIdApi(idDatPhong, res);
   }
 
   @Put('/:id')
   updateDatPhong(
     @Body() body: UpdateDatPhongDto,
     @Param('id') idDatPhong: number,
+    @Res() res,
   ): any {
-    return this.datPhongService.updateDatPhongApi(body, idDatPhong);
+    return this.datPhongService.updateDatPhongApi(body, idDatPhong, res);
   }
 
   @Delete('/:id')
-  deleteDatPhong(@Param('id') idDatPhong: number): any {
-    return this.datPhongService.deleteDatPhongApi(idDatPhong);
+  deleteDatPhong(@Param('id') idDatPhong: number, @Res() res): any {
+    return this.datPhongService.deleteDatPhongApi(idDatPhong, res);
   }
 
   @Get('/lay-theo-nguoi-dung/:MaNguoiDung')
-  getInfoDatPhongTheoNguoiDung(@Param('MaNguoiDung') maNguoiDung: number): any {
-    return this.datPhongService.getInfoDatPhongBaseOnNguoiDung(maNguoiDung);
+  getInfoDatPhongTheoNguoiDung(
+    @Param('MaNguoiDung') maNguoiDung: number,
+    @Res() res,
+  ): any {
+    return this.datPhongService.getInfoDatPhongBaseOnNguoiDung(
+      maNguoiDung,
+      res,
+    );
   }
 }
