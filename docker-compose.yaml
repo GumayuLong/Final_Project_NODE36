@@ -1,0 +1,38 @@
+version: '1'
+services:
+  mysql_db_airbnb:
+    image: mysql
+    container_name: mysql_db_airbnb
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=$DB_DATABASE_NAME
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
+      - MYSQL_PASSWORD=$DB_PASSWORD
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql_db_airbnb:/var/lib/mysql
+    networks:
+      - node-network
+  app:
+    depends_on:
+      - mysql_db_airbnb
+    build: .
+    container_name: be_final_project
+    env_file: .env
+    environment:
+      - DB_HOST=$DB_HOST
+      - DB_DIALECT=$DB_DIALECT
+      - DB_NAME=$DB_DATABASE_NAME
+      - DB_PORT=$DB_PORT
+      - DB_ROOT=$DB_USERNAME
+      - DB_PASS=$DB_PASSWORD
+    ports:
+      - '8080:8080'
+    networks:
+      - node-network
+volumes:
+  mysql_db_airbnb:
+    driver: local
+networks:
+  node-network:
