@@ -12,6 +12,7 @@ import {
   UseGuards,
   Headers,
   Res,
+  BadRequestException,
 } from '@nestjs/common';
 import { NguoiDungService } from './nguoi-dung.service';
 import { CreateNguoiDungDto } from './dto/create-nguoi-dung.dto';
@@ -85,9 +86,16 @@ export class NguoiDungController {
     FileInterceptor('formFile', {
       storage: diskStorage({
         destination: process.cwd() + '/public/img',
-        filename: (req, file, callback) =>
-          callback(null, new Date().getTime() + `_${file.originalname}`),
+        filename: (req, file, callback) => {
+          callback(null, new Date().getTime() + `_${file.originalname}`);
+        },
       }),
+      // fileFilter: (req, file, callback) => {
+      //   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      //     return callback(null, false);
+      //   }
+      //   callback(null, true);
+      // },
     }),
   )
   @ApiConsumes('multipart/form-data')
@@ -98,7 +106,11 @@ export class NguoiDungController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res,
   ) {
+    // if (!file) {
+    //   throw new BadRequestException('File is not an image!');
+    // } else {
     return this.nguoiDungService.uploadAvatar(idUser, file, res);
+    // }
   }
 
   @Get('/:id')

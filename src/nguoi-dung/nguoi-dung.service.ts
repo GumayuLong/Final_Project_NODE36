@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateNguoiDungDto } from './dto/create-nguoi-dung.dto';
 import { UpdateNguoiDungDto } from './dto/update-nguoi-dung.dto';
 import { PrismaClient } from '@prisma/client';
@@ -202,10 +202,10 @@ export class NguoiDungService {
         });
         return res.status(201).send(upload);
       } else {
-        return res.status(404).send('Mã người dùng không tồn tại!');
+        return res.status(404).send('Ma nguoi dung khong ton tai!');
       }
     } catch {
-      return res.status(500).send('Lỗi BE!');
+      return res.status(404).send('Khong tim thay tai nguyen!');
     }
   }
 }
