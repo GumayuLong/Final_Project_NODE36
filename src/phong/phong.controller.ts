@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { PhongService } from './phong.service';
 import { CreatePhongDto } from './dto/create-phong.dto';
@@ -26,12 +27,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UpLoadHinhPhongDto } from './dto/hinh-phong.dto';
-import { PrismaClient } from '@prisma/client';
 
 @ApiTags('Phong')
 @Controller('/api/phong')
 export class PhongController {
-  prisma = new PrismaClient();
   constructor(private readonly phongService: PhongService) {}
 
   @Get()
@@ -81,27 +80,46 @@ export class PhongController {
     );
   }
 
+  // Create ava phong` (1 pic)
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UpLoadHinhPhongDto })
   @Post('/upload-hinh-phong')
-  @UseInterceptors(
-    FileInterceptor('formFile', {
-      storage: diskStorage({
-        destination: process.cwd() + '/public/img',
-        filename: async (req, file, callback) => {
-          callback(null, new Date().getTime() + `_${file.originalname}`);
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('formFile'))
   async uploadAva(
     @Query('maPhong') maPhong: number,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
     @Res() res,
   ) {
-    return this.phongService.uploadHinhPhongApi(maPhong, file, res);
+    const key = `${file.originalname}${Date.now()}`;
+    return this.phongService.uploadHinhPhongApi(maPhong, file, key, res);
+  }
+
+  // Update ava phong (1 pic)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UpLoadHinhPhongDto })
+  @Put('/upload-hinh-phong')
+  @UseInterceptors(FileInterceptor('formFile'))
+  async updateAva(
+    @Query('maPhong') maPhong: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
+    @Res() res,
+  ) {
+    const key = `${file.originalname}${Date.now()}`;
+    return this.phongService.uploadHinhPhongApi(maPhong, file, key, res);
   }
 
   @Get('/:id')

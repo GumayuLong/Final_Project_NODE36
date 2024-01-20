@@ -1,11 +1,27 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateNguoiDungDto } from './dto/create-nguoi-dung.dto';
 import { UpdateNguoiDungDto } from './dto/update-nguoi-dung.dto';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+import {
+  PutObjectCommand,
+  S3Client,
+  PutObjectCommandInput,
+  PutObjectCommandOutput,
+} from '@aws-sdk/client-s3';
 
 @Injectable()
 export class NguoiDungService {
+  private region: string;
+  private s3: S3Client;
+  constructor(private readonly configService: ConfigService) {
+    this.region =
+      this.configService.get<string>('AWS_S3_REGION') || 'ap-southeast-1';
+    this.s3 = new S3Client({
+      region: this.region,
+    });
+  }
   prisma = new PrismaClient();
   async fetchNguoiDungApi(res): Promise<any> {
     try {
@@ -180,32 +196,53 @@ export class NguoiDungService {
     }
   }
 
-  async uploadAvatar(id, file, res): Promise<any> {
+  async uploadAvatar(
+    userId,
+    file: Express.Multer.File,
+    key: string,
+    res,
+  ): Promise<any> {
+    const bucket = this.configService.get<string>('AWS_BUCKET_NAME');
+    const input: PutObjectCommandInput = {
+      Body: file.buffer,
+      Bucket: bucket,
+      Key: key,
+      ContentType: file.mimetype,
+      ACL: 'public-read',
+    };
     try {
-      let checkUserId = await this.prisma.nguoi_dung.findFirst({
+      let checkId = await this.prisma.nguoi_dung.findFirst({
         where: {
-          id: Number(id),
+          id: Number(userId),
         },
       });
-      if (checkUserId) {
-        let data = await this.prisma.nguoi_dung.findFirst({
-          where: {
-            id: Number(id),
-          },
-        });
-        let newHinh = { ...data, avatar: file.filename };
-        let upload = await this.prisma.nguoi_dung.update({
-          where: {
-            id: Number(id),
-          },
-          data: newHinh,
-        });
-        return res.status(201).send(upload);
+      if (checkId) {
+        const response: PutObjectCommandOutput = await this.s3.send(
+          new PutObjectCommand(input),
+        );
+        if (response.$metadata.httpStatusCode === 200) {
+          const url = `http://${bucket}.s3.${this.region}.amazonaws.com/${key}`;
+          let data = await this.prisma.nguoi_dung.findFirst({
+            where: {
+              id: Number(userId),
+            },
+          });
+          let newHinh = { ...data, avatar: url };
+          let uploadAva = await this.prisma.nguoi_dung.update({
+            where: {
+              id: Number(userId),
+            },
+            data: newHinh,
+          });
+          return res.status(201).send(uploadAva);
+        } else {
+          return res.status(400).send('Upload avatar failed!');
+        }
       } else {
-        return res.status(404).send('Ma nguoi dung khong ton tai!');
+        return res.status(404).send('Mã người dùng không tồn tại!');
       }
     } catch {
-      return res.status(404).send('Khong tim thay tai nguyen!');
+      return res.status(400).send('Không tìm thấy tài nguyên!');
     }
   }
 }

@@ -1,6 +1,6 @@
 FROM node:16
 
-WORKDIR /Users/thanhlong/Documents/NodeJS-36/be_final_project
+WORKDIR /Users/thanhlong/Documents/NodeJS-36/be_final_project/Final_Project_NODE36
 
 COPY package*.json yarn.lock ./
 
@@ -8,7 +8,7 @@ RUN yarn install
 
 RUN yarn add prisma @prisma/client
 
-# RUN yarn cache clean --force
+RUN yarn cache clean --force
 
 COPY prisma ./prisma/
 

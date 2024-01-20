@@ -2,12 +2,25 @@ import { Injectable, UploadedFiles } from '@nestjs/common';
 import { CreatePhongDto } from './dto/create-phong.dto';
 import { UpdatePhongDto } from './dto/update-phong.dto';
 import { PrismaClient } from '@prisma/client';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { ppid } from 'process';
+import { ConfigService } from '@nestjs/config';
+import {
+  PutObjectCommand,
+  S3Client,
+  PutObjectCommandInput,
+  PutObjectCommandOutput,
+} from '@aws-sdk/client-s3';
 
 @Injectable()
 export class PhongService {
+  private region: string;
+  private s3: S3Client;
+  constructor(private readonly configService: ConfigService) {
+    this.region =
+      this.configService.get<string>('AWS_S3_REGION') || 'ap-southeast-1';
+    this.s3 = new S3Client({
+      region: this.region,
+    });
+  }
   prisma = new PrismaClient();
 
   async fetchPhongThueApi(res): Promise<any> {
@@ -255,7 +268,20 @@ export class PhongService {
     }
   }
 
-  async uploadHinhPhongApi(maPhong, file, res): Promise<any> {
+  async uploadHinhPhongApi(
+    maPhong,
+    file: Express.Multer.File,
+    key: string,
+    res,
+  ): Promise<any> {
+    const bucket = this.configService.get<string>('AWS_BUCKET_NAME');
+    const input: PutObjectCommandInput = {
+      Body: file.buffer,
+      Bucket: bucket,
+      Key: key,
+      ContentType: file.mimetype,
+      ACL: 'public-read',
+    };
     try {
       let checkMaPhong = await this.prisma.phong.findFirst({
         where: {
@@ -263,24 +289,30 @@ export class PhongService {
         },
       });
       if (checkMaPhong) {
-        let data = await this.prisma.phong.findFirst({
-          where: {
-            id: Number(maPhong),
-          },
-        });
-        let newHinh = { ...data, hinh_anh: file.filename };
-        let upload = await this.prisma.phong.update({
-          where: {
-            id: Number(maPhong),
-          },
-          data: newHinh,
-        });
-        return res.status(201).send(upload);
+        const response: PutObjectCommandOutput = await this.s3.send(
+          new PutObjectCommand(input),
+        );
+        if (response.$metadata.httpStatusCode === 200) {
+          const url = `http://${bucket}.s3.${this.region}.amazonaws.com/${key}`;
+          let data = await this.prisma.phong.findFirst({
+            where: {
+              id: Number(maPhong),
+            },
+          });
+          let newHinh = { ...data, hinh_anh: url };
+          let upload = await this.prisma.phong.update({
+            where: {
+              id: Number(maPhong),
+            },
+            data: newHinh,
+          });
+          return res.status(201).send(upload);
+        }
       } else {
         return res.status(404).send('Mã phòng không tồn tại');
       }
     } catch {
-      return res.status(500).send('Lỗi BE!');
+      return res.status(500).send('Không tìm thấy tài nguyên!');
     }
   }
 }

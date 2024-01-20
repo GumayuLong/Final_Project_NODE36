@@ -15,7 +15,11 @@ export class BinhLuanService {
 
   async fetchBinhLuanApi(res): Promise<any> {
     try {
-      let data = await this.prisma.binh_luan.findMany();
+      let data = await this.prisma.binh_luan.findMany({
+        include: {
+          nguoi_dung: true,
+        },
+      });
       return res.status(200).send(data);
     } catch {
       return res.status(500).send('Lỗi BE!');
@@ -181,6 +185,9 @@ export class BinhLuanService {
         let data = await this.prisma.binh_luan.findMany({
           where: {
             ma_phong: Number(maPhong),
+          },
+          include: {
+            nguoi_dung: true,
           },
         });
         return res.status(200).send(data);

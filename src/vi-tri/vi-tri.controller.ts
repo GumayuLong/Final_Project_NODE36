@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
@@ -12,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { ViTriService } from './vi-tri.service';
 import { CreateViTriDto } from './dto/create-vi-tri.dto';
@@ -25,7 +25,6 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { UpLoadHinhViTriDto } from './dto/hinh-vi-tri.dto';
 
 @ApiTags('ViTri')
@@ -75,27 +74,46 @@ export class ViTriController {
     );
   }
 
+  // Update ava vi_tri
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UpLoadHinhViTriDto })
-  @Post('/upload-hinh-vi-tri')
-  @UseInterceptors(
-    FileInterceptor('formFile', {
-      storage: diskStorage({
-        destination: process.cwd() + '/public/img',
-        filename: async (req, file, callback) => {
-          callback(null, new Date().getTime() + `_${file.originalname}`);
-        },
-      }),
-    }),
-  )
+  @Put('/upload-hinh-vi-tri')
+  @UseInterceptors(FileInterceptor('formFile'))
   async uploadAva(
     @Query('maViTri') maViTri: number,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
     @Res() res,
   ) {
-    return this.viTriService.uploadHinhViTriApi(maViTri, file, res);
+    const key = `${file.originalname}${Date.now()}`;
+    return this.viTriService.uploadHinhViTriApi(maViTri, file, key, res);
+  }
+
+  // Create ava vi_tri (1 pic)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UpLoadHinhViTriDto })
+  @Post(`/create-upload-hinh-vi-tri`)
+  @UseInterceptors(FileInterceptor('formFile'))
+  async uploadAvaCreate(
+    @Query('maViTri') maViTri: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
+    @Res() res,
+  ) {
+    const key = `${file.originalname}${Date.now()}`;
+    return this.viTriService.createUploadHinhVitri(maViTri, file, key, res);
   }
 
   @Get('/:id')

@@ -13,12 +13,13 @@ import {
   Headers,
   Res,
   BadRequestException,
+  ParseArrayPipe,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { NguoiDungService } from './nguoi-dung.service';
 import { CreateNguoiDungDto } from './dto/create-nguoi-dung.dto';
 import { UpdateNguoiDungDto } from './dto/update-nguoi-dung.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -26,7 +27,6 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { IsInt } from 'class-validator';
 import { AuthGuard } from '@nestjs/passport';
 import { FileUploadDto } from './dto/formData-dto';
 
@@ -82,35 +82,22 @@ export class NguoiDungController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(
-    FileInterceptor('formFile', {
-      storage: diskStorage({
-        destination: process.cwd() + '/public/img',
-        filename: (req, file, callback) => {
-          callback(null, new Date().getTime() + `_${file.originalname}`);
-        },
-      }),
-      // fileFilter: (req, file, callback) => {
-      //   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-      //     return callback(null, false);
-      //   }
-      //   callback(null, true);
-      // },
-    }),
-  )
+  @Post('/upload-avatar')
+  @UseInterceptors(FileInterceptor('formFile'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: FileUploadDto })
-  @Post('/upload-avatar')
-  uploadAva(
+  async uploadFile(
     @Query('id') idUser: number,
-    @UploadedFile() file: Express.Multer.File,
     @Res() res,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
   ) {
-    // if (!file) {
-    //   throw new BadRequestException('File is not an image!');
-    // } else {
-    return this.nguoiDungService.uploadAvatar(idUser, file, res);
-    // }
+    const key = `${file.originalname}${Date.now()}`;
+    await this.nguoiDungService.uploadAvatar(idUser, file, key, res);
   }
 
   @Get('/:id')
